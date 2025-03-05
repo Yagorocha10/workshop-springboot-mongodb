@@ -1,6 +1,7 @@
 package com.yagorocha.workshopmongo.resources;
 
 
+import com.yagorocha.workshopmongo.domain.Post;
 import com.yagorocha.workshopmongo.domain.User;
 import com.yagorocha.workshopmongo.dto.UserDTO;
 import com.yagorocha.workshopmongo.services.UserService;
@@ -24,7 +25,7 @@ public class UserResource {
 
 
      @RequestMapping(method= RequestMethod.GET)
-    public ResponseEntity<List<UserDTO>> findAll() {
+     public ResponseEntity<List<UserDTO>> findAll() {
         List<User> list = service.findAll();
         List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
         return ResponseEntity.ok().body(listDto);
@@ -58,6 +59,12 @@ public class UserResource {
         obj = service.update(obj);
         return ResponseEntity.noContent().build();
 
+    }
+
+    @RequestMapping(value = "/{id}/posts", method= RequestMethod.GET)
+    public ResponseEntity<List<Post>> findPosts(@PathVariable String id) {
+        User obj = service.findById(id);
+        return ResponseEntity.ok().body(obj.getPosts());
     }
 
 
